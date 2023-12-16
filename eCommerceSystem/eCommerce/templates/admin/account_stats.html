@@ -1,0 +1,24 @@
+
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h2>THỐNG KÊ TÀI KHOẢN</h2>
+  <p>Số lượng tài khoản: {{ account_count }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in info %}
+        <tr>
+          <td>{{ s.full_name }}</td>
+          <td>{{ s.role__name_role }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
