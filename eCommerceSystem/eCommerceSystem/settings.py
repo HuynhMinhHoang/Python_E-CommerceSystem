@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-@b4klm-f*w#*i3@zd^!n8d16%rpxehx=esiyekor1r#gv@#e&x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -25,15 +25,32 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eCommerce.apps.EcommerceConfig',
     'rest_framework',
-    'oauth2_provider'
+    'oauth2_provider',
+    'drf_yasg',
+    'corsheaders',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2
+    # 'PAGE_SIZE': 2
 }
 
 AUTH_USER_MODEL = 'eCommerce.User'
@@ -50,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'eCommerceSystem.urls'
@@ -81,7 +99,7 @@ DATABASES = {
         'NAME': 'dbapp',
         'USER': 'root',
         'PASSWORD': 'Hoang123@',
-        'HOST': ''  # mặc định localhost
+        'HOST': 'localhost'  # mặc định localhost
     }
 }
 
@@ -117,7 +135,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_ROOT = '%s/eCommerce/static/' % BASE_DIR
 
 # Default primary key field type

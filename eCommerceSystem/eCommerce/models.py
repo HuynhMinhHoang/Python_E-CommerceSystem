@@ -30,7 +30,7 @@ class Account(BaseModel):
     phone = models.CharField(max_length=15, null=False)
     username = models.CharField(max_length=100, unique=True, null=False)
     password = models.CharField(max_length=1000, null=False)
-    avt = models.ImageField(upload_to='account/%Y/%m', default=None)
+    avt = models.ImageField(upload_to='account/%Y/%m', default=None, null=True)
     active = models.BooleanField(default=False)
     role = models.ForeignKey(UserRole, on_delete=models.CASCADE, related_name="roles")
 
@@ -87,7 +87,7 @@ class Product(BaseModel):
 
 
 class Image(models.Model):
-    thumbnail = models.CharField(max_length=1000, null=False)
+    thumbnail = models.ImageField(upload_to='product/%Y/%m', default=None)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):

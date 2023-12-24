@@ -3,7 +3,7 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.safestring import mark_safe
 
-from .models import Store, Product, Category, UserRole, Account, Attribute, ProductAttribute, User
+from .models import Image, Store, Product, Category, UserRole, Account, Attribute, ProductAttribute, User
 from . import dao
 
 class eCommerceAdminSite(admin.AdminSite):
@@ -59,3 +59,4 @@ adminSite.register(Category)
 adminSite.register(UserRole)
 adminSite.register(Attribute)
 adminSite.register(User)
+adminSite.register(Image)

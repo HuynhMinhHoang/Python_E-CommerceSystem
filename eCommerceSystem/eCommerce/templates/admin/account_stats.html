@@ -1,9 +1,23 @@
 {% extends "admin/base_site.html" %}
 
-{% block content %}
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block extrahead %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const header = document.getElementById("header");
+      if (header) {
+        header.innerHTML = `
+          <div id="branding">
+            <div id="site-name"><a href="/admin/">eCommerce - System</a></div>
+          </div>
+        `;
+      }
+    });
+</script>
+{% endblock %}
 
-  <style>
+{% block content %}
+<style>
     body {
       background-color: white;
     }
@@ -11,31 +25,32 @@
     h2 {
       color: black;
     }
-  </style>
 
-  <h2>THỐNG KÊ TÀI KHOẢN</h2>
-  <table>
+</style>
+
+<h2>THỐNG KÊ TÀI KHOẢN</h2>
+<table>
     <thead>
-      <tr>
+    <tr>
         <th>Role</th>
         <th>Số lượng</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
-      {% for r in stats_account %}
-        <tr>
-          <td>{{ r.name_role }}</td>
-          <td>{{ r.count }}</td>
-        </tr>
-      {% endfor %}
+    {% for r in stats_account %}
+    <tr>
+        <td>{{ r.name_role }}</td>
+        <td>{{ r.count }}</td>
+    </tr>
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 
-  <div>
+<div>
     <canvas id="myChart"></canvas>
-  </div>
+</div>
 
-  <script>
+<script>
     window.onload = () => {
       let labels = [];
       let values = [];
@@ -84,5 +99,6 @@
         }
       });
     };
-  </script>
+
+</script>
 {% endblock %}
