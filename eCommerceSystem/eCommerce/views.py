@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, permissions,parsers
 from rest_framework.parsers import MultiPartParser
 
 from .models import Product, Category, Account, Image, UserRole
@@ -12,7 +12,7 @@ class AccountViewSet(viewsets.ViewSet,
     # RetrieveAPIView lay thong in user dang login
     queryset = Account.objects.filter(active=True)
     serializer_class = AccountSerializer  # serializer du lieu ra thanh json
-    parser_classes = [MultiPartParser, ]
+    parser_classes = [parsers.MultiPartParser]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

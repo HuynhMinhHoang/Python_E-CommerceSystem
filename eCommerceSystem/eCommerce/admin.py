@@ -3,8 +3,9 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.safestring import mark_safe
 
-from .models import Image, Store, Product, Category, UserRole, Account, Attribute, ProductAttribute, User
 from . import dao
+from .models import Image, Store, Product, Category, UserRole, Account, Attribute
+
 
 class eCommerceAdminSite(admin.AdminSite):
     site_header = 'eCommerce - System'
@@ -52,11 +53,9 @@ class ProductInline(admin.StackedInline):
 adminSite = eCommerceAdminSite('myEcommerce')
 
 adminSite.register(Store)
-adminSite.register(ProductAttribute)
 adminSite.register(Product, ProductAdmin)
 adminSite.register(Account, AccountAdmin)
 adminSite.register(Category)
 adminSite.register(UserRole)
 adminSite.register(Attribute)
-adminSite.register(User)
 adminSite.register(Image)

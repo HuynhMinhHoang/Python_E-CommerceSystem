@@ -28,7 +28,16 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'drf_yasg',
     'corsheaders',
+    'cloudinary'
 ]
+
+import cloudinary
+
+cloudinary.config(
+    cloud_name="diyeuzxqt",
+    api_key="599941136112728",
+    api_secret="FK5DmkFmGOJev3sTfwLLOnPI4tw"
+)
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -53,7 +62,7 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 2
 }
 
-AUTH_USER_MODEL = 'eCommerce.User'
+AUTH_USER_MODEL = 'eCommerce.Account'
 
 import pymysql
 
@@ -96,7 +105,7 @@ WSGI_APPLICATION = 'eCommerceSystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbapp',
+        'NAME': 'dbserver',
         'USER': 'root',
         'PASSWORD': 'Hoang123@',
         'HOST': 'localhost'  # mặc định localhost
