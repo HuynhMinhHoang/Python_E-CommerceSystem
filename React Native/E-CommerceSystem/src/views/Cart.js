@@ -61,7 +61,18 @@ const HeaderComponent = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.brButton}></View>
+      <View style={styles.brButton6}></View>
+
+      <View style={styles.bgContent}>
+        <View style={styles.bgFreeShip}>
+          <Image
+            source={require("../images/freeship.png")}
+            style={styles.iconFreeShip}
+          ></Image>
+          <Text>Đừng bỏ lỡ mã Freeship ở mục Voucher</Text>
+        </View>
+      </View>
+      <View style={styles.brButton6}></View>
     </View>
   );
 };
@@ -89,18 +100,7 @@ const ContentComponent = () => {
   // ]);
 
   return (
-    <View>
-      <View style={styles.bgContent}>
-        <View style={styles.bgFreeShip}>
-          <Image
-            source={require("../images/freeship.png")}
-            style={styles.iconFreeShip}
-          ></Image>
-          <Text>Đừng bỏ lỡ mã Freeship ở mục Voucher</Text>
-        </View>
-      </View>
-      <View style={styles.brButton1}></View>
-
+    <ScrollView>
       <View>
         <TouchableOpacity style={styles.bgNameShop}>
           <Image
@@ -213,7 +213,7 @@ const ContentComponent = () => {
       </View>
 
       <View style={styles.brButton1}></View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -238,13 +238,13 @@ const styles = StyleSheet.create({
   },
   viewHeader: {
     width: "100%",
-    flex: 13,
+    flex: 14.1,
     backgroundColor: "white",
     // borderWidth: 1,
   },
   viewContent: {
     width: "100%",
-    flex: 80,
+    flex: 57,
     // marginTop: 1,
 
     backgroundColor: "white",
@@ -258,8 +258,8 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     marginTop: 40,
-    width: "100%",
-    height: "100%",
+    // width: "100%",
+    // height: "100%",
   },
   signIn: {
     height: 60,
@@ -284,6 +284,11 @@ const styles = StyleSheet.create({
   },
   brButton1: {
     height: 10,
+    width: "100%",
+    backgroundColor: "#F2F2F2",
+  },
+  brButton6: {
+    height: 2,
     width: "100%",
     backgroundColor: "#F2F2F2",
   },

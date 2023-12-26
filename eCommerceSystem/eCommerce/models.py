@@ -1,6 +1,8 @@
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from ckeditor.fields import RichTextField
+
 
 
 class UserRole(models.Model):
@@ -18,7 +20,7 @@ class Account(AbstractUser):
     email = models.EmailField(unique=True, null=True)
     phone = models.CharField(max_length=15, null=True)
     avt = CloudinaryField('avt', null=True)
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=False, null=True)
     role = models.ForeignKey(UserRole, on_delete=models.CASCADE, related_name="roles", null=True)
 
     def __str__(self):
@@ -61,7 +63,7 @@ class Category(models.Model):
 class Product(BaseModel):
     name_product = models.CharField(max_length=255, null=False)
     price = models.FloatField(null=False)
-    description = models.TextField(null=False)
+    description = RichTextField()
     status = models.BooleanField(default=True)
     quantity = models.IntegerField(null=False)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -132,8 +134,8 @@ class Order(BaseModel):
     status_order = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    paymentType = models.OneToOneField(PaymentType, on_delete=models.CASCADE)
-    shippingType = models.OneToOneField(ShippingType, on_delete=models.CASCADE)
+    paymentType = models.ForeignKey(PaymentType, on_delete=models.CASCADE)
+    shippingType = models.ForeignKey(ShippingType, on_delete=models.CASCADE)
     # order_cart = models.ManyToManyField(Cart, through='OrderDetail', related_name='orderDetail')
 
     def __str__(self):

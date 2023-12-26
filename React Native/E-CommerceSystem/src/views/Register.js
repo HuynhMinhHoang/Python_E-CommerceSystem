@@ -42,7 +42,7 @@ export default Register = ({ navigation }) => {
       </View>
 
       <View style={styles.viewContent}>
-        <ContentComponent />
+        <ContentComponent navigation={navigation} />
       </View>
 
       <View style={styles.viewFooter}>
@@ -82,7 +82,7 @@ const HeaderComponent = ({ page, setPage }) => {
   );
 };
 
-const ContentComponent = () => {
+const ContentComponent = ({ navigation }) => {
   const [passHidden, setPassHidden] = useState(true);
 
   const [isOpenRole, setIsOpenRole] = useState(false);
@@ -90,7 +90,7 @@ const ContentComponent = () => {
   const [roleOptions, setRoleOptions] = useState([]);
   const [selectedGender, setSelectedGender] = useState(null);
   const [avatar, setAvatar] = useState(null);
-  const [selectedImageUri, setSelectedImageUri] = useState(null);
+  // const [selectedImageUri, setSelectedImageUri] = useState(null);
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -117,13 +117,21 @@ const ContentComponent = () => {
       formData.append("phone", phone);
       formData.append("username", username);
       formData.append("password", password);
-      formData.append("avt", avatar);
+
+      if (avatar) {
+        formData.append("avt", {
+          uri: avatar.uri,
+          name: avatar.fileName,
+          type: avatar.type,
+        });
+      }
+
       formData.append("role", currentValue);
 
       const response = await fetch("http://10.0.2.2:8000/accounts/register/", {
         method: "POST",
         headers: {
-          // "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
         body: formData,
       });
@@ -135,57 +143,14 @@ const ContentComponent = () => {
         navigation.navigate("Login");
       } else {
         console.log("Đăng ký không thành công:", data);
-        console.log(
-          fullName,
-          dateOfBirth,
-          selectedGender,
-          address,
-          email,
-          phone,
-          username,
-          password,
-          avatar,
-          currentValue
-        );
       }
     } catch (error) {
       console.error("Lỗi kết nối:", error);
-      console.log(
-        fullName,
-        dateOfBirth,
-        selectedGender,
-        address,
-        email,
-        phone,
-        username,
-        password,
-        avatar,
-        currentValue
-      );
-      // navigation.navigate("Login");
+      // console.log(fullName, avatar);
     }
   };
 
   //validated input
-  const handleRegister = () => {
-    if (
-      !username ||
-      !password ||
-      !fullName ||
-      !dateOfBirth ||
-      !email ||
-      !phone ||
-      !address ||
-      !selectedGender ||
-      !avatar ||
-      !currentValue
-    ) {
-      console.log("Vui lòng nhập đầy đủ thông tin!");
-      return;
-    }
-
-    registerUser();
-  };
 
   //select gender
   const [genderOptions, setGenderOptions] = useState([
@@ -211,32 +176,13 @@ const ContentComponent = () => {
 
   //upload avt
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const selectedAsset =
-        result.assets && result.assets.length > 0 ? result.assets[0] : null;
-
-      if (selectedAsset) {
-        setSelectedImageUri(selectedAsset.uri);
-        const formData = new FormData();
-
-        const uriParts = selectedAsset.uri.split(".");
-        const fileType = uriParts[uriParts.length - 1];
-        const fileName = `avatar.${fileType}`;
-
-        formData.append("avt", {
-          uri: selectedAsset.uri,
-          type: `image/${fileType}`,
-          name: fileName,
-        });
-
-        setAvatar(formData);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Không được phép!");
+    } else {
+      const res = await ImagePicker.launchImageLibraryAsync();
+      if (!res.canceled) {
+        setAvatar(res.assets[0]);
       }
     }
   };
@@ -485,13 +431,22 @@ const ContentComponent = () => {
 
             {/* avt */}
             <TouchableOpacity style={styles.bgInputAVT} onPress={pickImage}>
-              {selectedImageUri ? (
+              {avatar ? (
                 <Image
-                  source={{ uri: selectedImageUri }}
-                  style={{ width: 250, height: 150, resizeMode: "contain" }}
+                  source={{ uri: avatar.uri }}
+                  style={{
+                    width: 250,
+                    height: 150,
+                    resizeMode: "contain",
+                    // marginTop: 30,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 />
               ) : (
-                <View style={{ alignItems: "center" }}>
+                <View
+                  style={{ alignItems: "center", justifyContent: "center" }}
+                >
                   <Image
                     source={require("../images/upload.png")}
                     style={{ width: 30, height: 30 }}

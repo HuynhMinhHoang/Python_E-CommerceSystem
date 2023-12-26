@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { Image } from "react-native";
+import { authorize } from "react-native-app-auth";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faLight,
@@ -10,6 +11,7 @@ import {
   faEye,
   faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
+// const { hashPassword, comparePassword } = require("../config/bcrypt");
 
 import {
   Dimensions,
@@ -76,19 +78,46 @@ const HeaderComponent = ({ page, setPage }) => {
 
 const ContentComponent = ({ navigation }) => {
   const [passHidden, setPassHidden] = useState(true);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [token, setToken] = useState(null);
 
   //show password
   const chaneIconPassHidden = () => {
     setPassHidden(!passHidden);
   };
 
-  //login 
+  //bcrypt password
 
+  //login
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://10.0.2.2:8000/o/token/",
+        `grant_type=password&username=${username}&password=${password}&client_id=dMlVgp3i59e91nDEGZ0Kq6D7uLX6MKLq3RL68eoT&client_secret=hA095gEXYFSqRCnt2fN2qgzWRL7M6Xpay3Bjd8ddQLVc7LhQzH7mYibKpOrMR7soZhthIaWsKf6rxBHDWohV5ePKNIMFmQQT9gEgS3Dt3ngvlv6zftrKtwk8usb5wFLH`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
 
-  
-  
+      const accessToken = response.data.access_token;
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      const userInfoResponse = await axios.get(
+        "http://10.0.2.2:8000/accounts/current_user/"
+      );
+
+      console.log("Thông tin người dùng:", userInfoResponse.data);
+
+      navigation.navigate("HomeTabs");
+    } catch (error) {
+      console.error("Đăng nhập thất bại:", error);
+      console.log("Error details:", error.response.data);
+    }
+  };
 
   return (
     <View style={styles.containerContent}>
@@ -104,7 +133,7 @@ const ContentComponent = ({ navigation }) => {
           placeholder="Tên đăng nhập"
           autoCapitalize="none"
           placeholderTextColor="#969696"
-          // onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
         />
       </View>
       {/* password */}
@@ -119,7 +148,7 @@ const ContentComponent = ({ navigation }) => {
           autoCapitalize="none"
           placeholderTextColor="#969696"
           secureTextEntry={passHidden ? true : false}
-          // onChangeText={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
         />
         <TouchableOpacity onPress={chaneIconPassHidden}>
           <FontAwesomeIcon
@@ -140,9 +169,10 @@ const ContentComponent = ({ navigation }) => {
       {/* button login */}
       <TouchableOpacity
         style={styles.bgButtonLogin}
-        onPress={() => {
-          navigation.navigate("HomeTabs");
-        }}
+        // onPress={() => {
+        //   navigation.navigate("HomeTabs");
+        // }}
+        onPress={handleLogin}
       >
         <Text style={styles.textBtnLogin}>Đăng nhập</Text>
       </TouchableOpacity>
@@ -245,7 +275,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEFEFE",
     borderBottomWidth: 2,
     borderBottomColor: "#eeeeee",
-
   },
   backgroundSignIn: {
     width: "100%",

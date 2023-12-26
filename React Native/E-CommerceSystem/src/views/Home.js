@@ -13,7 +13,7 @@ import React, { useState, useEffect, useRef } from "react";
 //   faComments,
 //   faCartShopping,
 // } from "@fortawesome/free-regular-svg-icons";
-import LinearGradient from "react-native-linear-gradient";
+
 import {
   Dimensions,
   SafeAreaView,

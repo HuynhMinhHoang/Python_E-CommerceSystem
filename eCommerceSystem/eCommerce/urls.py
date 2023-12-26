@@ -21,6 +21,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register('accounts', views.AccountViewSet)
+
 router.register('categories', views.CategoryViewSet)
 router.register('products', views.ProductViewSet)
 router.register('images', views.ImageViewSet)
@@ -29,6 +30,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', adminSite.urls),
     path('accounts/register/', views.AccountViewSet.as_view({'post': 'create'}), name='account-register'),
+
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),
             name='schema-json'),
@@ -37,5 +39,7 @@ urlpatterns = [
             name='schema-swagger-ui'),
     re_path(r'^redoc/$',
             schema_view.with_ui('redoc', cache_timeout=0),
-            name='schema-redoc')
+            name='schema-redoc'),
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
 ]

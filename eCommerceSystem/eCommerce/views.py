@@ -1,6 +1,8 @@
-from rest_framework import viewsets, generics, permissions,parsers
-from rest_framework.parsers import MultiPartParser
+from rest_framework import viewsets, generics, permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
+from . import serializers
 from .models import Product, Category, Account, Image, UserRole
 from .serializers import RoleSerializer, ProductSerializer, CategorySerializer, AccountSerializer, ImageSerializer
 
@@ -12,7 +14,18 @@ class AccountViewSet(viewsets.ViewSet,
     # RetrieveAPIView lay thong in user dang login
     queryset = Account.objects.filter(active=True)
     serializer_class = AccountSerializer  # serializer du lieu ra thanh json
-    parser_classes = [parsers.MultiPartParser]
+
+    # parser_classes = [parsers.MultiPartParser]
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action.__eq__('current_user'):
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+
+    @action(methods=['get'], url_name='current-user', detail=False)
+    def current_user(self, request):
+        return Response(serializers.AccountSerializer(request.user).data)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

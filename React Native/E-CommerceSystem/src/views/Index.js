@@ -125,7 +125,7 @@ export default RootComponent = function () {
       <NavigationContainer>
         {
           <Stack.Navigator
-            initialRouteName="HomeTabs"
+            initialRouteName="Register"
             screenOptions={{ headerShown: false }}
           >
             <Stack.Screen name="Home" component={Home} />

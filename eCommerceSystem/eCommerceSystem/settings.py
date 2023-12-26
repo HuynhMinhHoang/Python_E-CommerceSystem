@@ -25,11 +25,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eCommerce.apps.EcommerceConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'oauth2_provider',
     'drf_yasg',
     'corsheaders',
-    'cloudinary'
+    'cloudinary',
+    'ckeditor',
+    'ckeditor_uploader'
 ]
+
+CLIENT_ID = "dMlVgp3i59e91nDEGZ0Kq6D7uLX6MKLq3RL68eoT"
+CLIENT_SECRET = "hA095gEXYFSqRCnt2fN2qgzWRL7M6Xpay3Bjd8ddQLVc7LhQzH7mYibKpOrMR7soZhthIaWsKf6rxBHDWohV5ePKNIMFmQQT9gEgS3Dt3ngvlv6zftrKtwk8usb5wFLH"
 
 import cloudinary
 
@@ -77,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'eCommerceSystem.urls'
@@ -146,6 +153,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = '%s/eCommerce/static/' % BASE_DIR
+CKEDITOR_UPLOAD_PATH = "product/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

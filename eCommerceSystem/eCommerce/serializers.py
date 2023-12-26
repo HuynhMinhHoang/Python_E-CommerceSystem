@@ -23,21 +23,21 @@ class AccountSerializer(ModelSerializer):
         fields = ["id", 'full_name', 'date_of_birth', 'gender', 'address', 'email', 'phone', 'username', 'password'
             , 'avt', 'role_name', "role"]
 
-        extra_kwargs = {
-            'password': {'write_only': 'true'}
-        }
+        # extra_kwargs = {
+        #     'password': {'write_only': 'true'}
+        # }
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
-        # avt = validated_data.pop('avt', None)
+        avt = validated_data.pop('avt', None)
         if password is not None:
             validated_data['password'] = make_password(password)
 
         accounts = Account.objects.create(**validated_data)
 
-        # if avt is not None:
-        #     accounts.avt = avt
-        #     accounts.save()
+        if avt is not None:
+            accounts.avt = avt
+            accounts.save()
 
         return accounts
 
@@ -47,6 +47,9 @@ class AccountSerializer(ModelSerializer):
     #         if request:
     #             return request.build_absolute_uri('/static/%s' % account.avt.name)
     #         return '/static/%s' % account.avt.name
+
+
+# login
 
 
 class StoreSerializer(ModelSerializer):

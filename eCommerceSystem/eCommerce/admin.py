@@ -1,3 +1,5 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls import path
@@ -41,13 +43,26 @@ class AccountAdmin(admin.ModelAdmin):
             "<img src='/static/{img_url}' alt='{alt}' width='120px'/>".format(img_url=account.avt, alt="Error"))
 
 
+class ProductForm(forms.Form):
+    description = forms.CharField(widget=CKEditorUploadingWidget)
+
+    class Meta:
+        model = Product
+        fields: '__all__'
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ['category', 'status']
+    forms = ProductForm
 
 
 class ProductInline(admin.StackedInline):
     model = Product
-    pk_name = ''
+    extra = 1
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    inlines = (ProductInline,)
 
 
 adminSite = eCommerceAdminSite('myEcommerce')
@@ -55,7 +70,7 @@ adminSite = eCommerceAdminSite('myEcommerce')
 adminSite.register(Store)
 adminSite.register(Product, ProductAdmin)
 adminSite.register(Account, AccountAdmin)
-adminSite.register(Category)
+adminSite.register(Category, CategoryAdmin)
 adminSite.register(UserRole)
 adminSite.register(Attribute)
 adminSite.register(Image)
