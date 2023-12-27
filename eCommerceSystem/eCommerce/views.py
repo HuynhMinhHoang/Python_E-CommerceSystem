@@ -19,12 +19,12 @@ class AccountViewSet(viewsets.ViewSet,
     # permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
-        if self.action.__eq__('current_user'):
+        if self.action.__eq__('current_account'):
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
 
-    @action(methods=['get'], url_name='current-user', detail=False)
-    def current_user(self, request):
+    @action(methods=['get'], url_name='current-account', detail=False)
+    def current_account(self, request):
         return Response(serializers.AccountSerializer(request.user).data)
 
 
