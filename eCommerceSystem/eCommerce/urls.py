@@ -21,7 +21,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register('accounts', views.AccountViewSet)
-
+router.register('stores', views.StoreViewSet)
 router.register('categories', views.CategoryViewSet)
 router.register('products', views.ProductViewSet)
 router.register('images', views.ImageViewSet)
@@ -29,7 +29,8 @@ router.register('roles', views.RoleViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', adminSite.urls),
-    path('accounts/register/', views.AccountViewSet.as_view({'post': 'create'}), name='account-register'),
+    # path('accounts/register/', views.AccountViewSet.as_view({'post': 'create'}), name='account-register'),
+    path('stores/register/', views.StoreViewSet.as_view({'post': 'create'}), name='stores-register'),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),

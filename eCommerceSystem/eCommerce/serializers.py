@@ -1,5 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
+from rest_framework.decorators import parser_classes
 from rest_framework.serializers import ModelSerializer
 
 from .models import Image, Product, Category, Attribute, Store, Account, UserRole
@@ -53,10 +54,22 @@ class AccountSerializer(ModelSerializer):
 
 
 class StoreSerializer(ModelSerializer):
+
     class Meta:
         model = Store
-        fields = ["name_store", "address"]
+        fields = ["name_store", "address", "avt", "account"]
         # fields = ["id", "name_store", "address", "active"]
+
+    def create(self, validated_data):
+        avt = validated_data.pop('avt', None)
+
+        store = Store.objects.create(**validated_data)
+
+        if avt is not None:
+            store.avt = avt
+            store.save()
+
+        return store
 
 
 class CategoryListSerializer(ModelSerializer):
@@ -72,25 +85,23 @@ class AttributeSerializer(ModelSerializer):
         # fields = ["id", "name_at", "data_type"]
 
 
-class ProductSerializer(ModelSerializer):
-    product_attributes = AttributeSerializer(many=True, read_only=True, source='attribute')
-    store_info = StoreSerializer(source='store', read_only=True)
-
-    category_info = CategoryListSerializer(source='category', read_only=True)
-
-    class Meta:
-        model = Product
-        fields = ["id", "name_product", "price", "description", "status", "quantity", "store_info", "category_info",
-                  'product_attributes']
+# class ListProductSerializer(ModelSerializer):
+#     product_attributes = AttributeSerializer(many=True, read_only=True, source='attribute')
+#     store_info = StoreSerializer(source='store', read_only=True)
+#     category_info = CategoryListSerializer(source='category', read_only=True)
+#
+#     class Meta:
+#         model = Product
+#         fields = ["id", "name_product", "price", "description", "status", "quantity", "store_info", "category_info",
+#                   'product_attributes']
 
 
 class ImageSerializer(ModelSerializer):
-    product_info = ProductSerializer(source='product', read_only=True)
     thumbnail = serializers.SerializerMethodField(source='thumbnail')
 
     class Meta:
         model = Image
-        fields = ['id', 'thumbnail', 'product_info']
+        fields = ['id', 'thumbnail']
 
     def get_thumbnail(self, image):
         if image.thumbnail:
@@ -98,6 +109,34 @@ class ImageSerializer(ModelSerializer):
             if request:
                 return request.build_absolute_uri('/static/%s' % image.thumbnail.name)
             return '/static/%s' % image.thumbnail.name
+
+
+class ProductSerializer(ModelSerializer):
+    product_attributes = AttributeSerializer(many=True, read_only=True, source='attribute')
+    store_info = StoreSerializer(source='store', read_only=True)
+    category_info = CategoryListSerializer(source='category', read_only=True)
+    images = ImageSerializer(many=True, read_only=True, source='image_set')
+
+    class Meta:
+        model = Product
+        fields = ["id", "name_product", "price", "description", "status", "quantity", "store_info", "category_info",
+                  'product_attributes', 'images']
+
+
+# class ListImageSerializer(ModelSerializer):
+#     product_info = ProductSerializer(source='product', read_only=True)
+#     thumbnail = serializers.SerializerMethodField(source='thumbnail')
+#
+#     class Meta:
+#         model = Image
+#         fields = ['id', 'thumbnail', 'product_info']
+#
+#     def get_thumbnail(self, image):
+#         if image.thumbnail:
+#             request = self.context.get('request')
+#             if request:
+#                 return request.build_absolute_uri('/static/%s' % image.thumbnail.name)
+#             return '/static/%s' % image.thumbnail.name
 
 
 class CategorySerializer(ModelSerializer):

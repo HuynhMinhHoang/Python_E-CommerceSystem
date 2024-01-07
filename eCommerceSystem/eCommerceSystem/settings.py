@@ -34,6 +34,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader'
 ]
 
+# OAUTH2_PROVIDER = {
+#     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+# }
+
 CLIENT_ID = "dMlVgp3i59e91nDEGZ0Kq6D7uLX6MKLq3RL68eoT"
 CLIENT_SECRET = "hA095gEXYFSqRCnt2fN2qgzWRL7M6Xpay3Bjd8ddQLVc7LhQzH7mYibKpOrMR7soZhthIaWsKf6rxBHDWohV5ePKNIMFmQQT9gEgS3Dt3ngvlv6zftrKtwk8usb5wFLH"
 
@@ -66,6 +70,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 2
+
 }
 
 AUTH_USER_MODEL = 'eCommerce.Account'

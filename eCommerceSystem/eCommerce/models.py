@@ -1,8 +1,7 @@
+from ckeditor.fields import RichTextField
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from ckeditor.fields import RichTextField
-
 
 
 class UserRole(models.Model):
@@ -39,6 +38,7 @@ class Store(BaseModel):
     name_store = models.CharField(max_length=255, null=False)
     address = models.CharField(max_length=500, null=False)
     active = models.BooleanField(default=False)
+    avt = CloudinaryField('avt', null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -136,6 +136,7 @@ class Order(BaseModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     paymentType = models.ForeignKey(PaymentType, on_delete=models.CASCADE)
     shippingType = models.ForeignKey(ShippingType, on_delete=models.CASCADE)
+
     # order_cart = models.ManyToManyField(Cart, through='OrderDetail', related_name='orderDetail')
 
     def __str__(self):
